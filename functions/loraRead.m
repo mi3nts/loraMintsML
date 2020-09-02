@@ -2,7 +2,7 @@ function  mintsData = loraRead(fileName)
 %LORAREAD Summary of this function goes here
 %   Detailed explanation goes here
 
-
+    display("Reading Lora Data for: "+ fileName)
     %% Setup the Import Options and import the data
     opts = delimitedTextImportOptions("NumVariables", 31);
 
@@ -28,6 +28,9 @@ function  mintsData = loraRead(fileName)
     mintsData.dateTime.TimeZone = "utc";
     
     mintsData(isundefined(mintsData.id),:)=[];
+    
+    mintsData.id = [];        
+    mintsData   =  retime(table2timetable(mintsData),'regular',@nanmean,'TimeStep',seconds(30));
     
     %% Clear temporary variables
     clear opts
