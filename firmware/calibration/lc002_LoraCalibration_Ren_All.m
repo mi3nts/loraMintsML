@@ -78,9 +78,6 @@ mintsInputLabels ={...
     'Humidity SCD30'   ,...
         }
     
-    
-    
-    
 mintsTargets =   {...
             'pm1_PALAS'                   ,...
             'pm2_5_palas'                 ,...
@@ -104,20 +101,20 @@ mintsTargetLabels =   {...
                     'Dew Point'               ,...
                     'Pressure'                 ...
                      }        
- 
 
 % for graphing 
-limitsLow  ={ 0, 0,  0,  0,  0,  0,   0, .9}
-limitsHight={20, 4 60 80 40 100 30  1}
+limitsLow  ={ 0,  0,  0,  0,  20,  20, 10, .98};
+limitsHigh= {20, 25, 30, 40,  45,  75, 25,  .995};
+
 units      = {'\mug/m^{3}',...
                '\mug/m^{3}',...
                '\mug/m^{3}',...
                '\mug/m^{3}',...
                'C^{o}',...
-               '%'
+               '%',...
                'C^{o}',...
                'bars'...
-               }
+               };
                  
 instruments = {'Palas Spectrometor',...
                'Palas Spectrometor',...
@@ -127,8 +124,22 @@ instruments = {'Palas Spectrometor',...
                'Airmar WS',...
                'Airmar WS',...
                'Airmar WS',...
-                }           
-           
+                };           
+
+versionStrTrain = ['loraFitRen_All_' datestr(today,'yyyy_mm_dd')];
+disp(versionStrTrain)
+versionStrMdl   = ['loraFitRen_Mdl_' datestr(today,'yyyy_mm_dd')];
+disp(versionStrMdl)
+display(newline)
+dailyString     = "lora_Ren_All_Daily";
+dailyStringImp     = "lora_Ren_All_Daily_Imp";
+disp(dailyString)
+display(newline)          
+graphTitle1     = "Ensemble Learner All Inputs";
+disp(graphTitle1)
+display(newline)           
+                        
+            
 rawFolder          =  dataFolder + "/raw";
 rawDotMatsFolder   =  dataFolder + "/rawMats";
 loraMatsFolder     =  rawDotMatsFolder  + "/lora";
@@ -162,7 +173,7 @@ load(strcat(palasMatsFolder,"/palas.mat"));
 palasData = palas;
 
 display("Loading GPS Files");
-load(strcat(GPSFolder,"/carMintsGPS.mat"));
+load(strcat(GPSFolder,"/carMintsGPSCoords.mat"));
 carGpsData = mintsData;
 
 display("Loading Airmar Files");
@@ -200,7 +211,6 @@ airmarDataWSTC.Properties.VariableNames =    {'temperatureAirmar'    ,...
                                             'pressureAirmar'};
                                         
 %% Syncing Data 
-
 display("Aligning GPS data with Palas Data")
 palasWithGPS  =  rmmissing(synchronize(palasData,carGpsData,'intersection'));
 
@@ -210,20 +220,12 @@ palasWSTC = removevars( palasWSTC, {...
                                 'latitudeCoordinate'  ,...
                                 'longitudeCoordinate'  });
 
-
-
 display("Palas With Airmar")
 palasWithAirmar  =  rmmissing(synchronize(palasWSTC,airmarDataWSTC,'intersection'));
 
-
-
 %% Loading Lora Data and merging them with Palas Data 
 display("Analysis")
-versionStrTrain = ['loraFitRNN_All_' datestr(today,'yyyy_mm_dd')];
-disp(versionStrTrain)
-versionStrMdl   = ['loraFitRNN_Mdl_' datestr(today,'yyyy_mm_dd')];
-disp(versionStrMdl)
-display(newline)
+
 
 
 for nodeIndex = 1:length(loraIDs)
@@ -243,18 +245,15 @@ for nodeIndex = 1:length(loraIDs)
        continue;
     end
     
-    
     loraData   = rmmissing(mintsData,'MinNumMissing',width(mintsData)-1);    
     
     %% Check points  
 
-        
     % if enough data was recorded 
     if (height(loraData)<100)
        display(strcat("Not enough Data points for Node: ",loraID));
        continue 
     end    
-    
     
     % if GPS was recorded 
     if (all(isnan((loraData.Latitude))))
@@ -273,10 +272,8 @@ for nodeIndex = 1:length(loraIDs)
        display(strcat("Not enough Data points for Node: ",loraID," after cleaning"));
        continue 
     end    
-  
     
     loraWithTargets =  rmmissing(synchronize(loraData,palasWithAirmar,'intersection'));
-  
                                                                   
     %% Geo Bound LoRa Nodes 
     % WSTC Coordinates - Only For Training Purposes
@@ -334,9 +331,17 @@ for nodeIndex = 1:length(loraIDs)
         display("Running Regression")
   
         tic     
-        Mdl = fitrnn(In_Train,Out_Train);
-        display("Training Time: " + toc  + " Seconds")
         
+        Mdl = fitrensemble(trainingT,target,...
+                        'OptimizeHyperparameters','all',...
+                        'HyperparameterOptimizationOptions',...
+                            struct(...
+                            'AcquisitionFunctionName','expected-improvement-plus',...
+                            'UseParallel',true ...
+                            )...
+                        );
+
+        display("Training Time: " + toc  + " Seconds")
         
         %% Saving Model Files 
         display(strcat("Saving Model Files for Node: ",loraID, "& target :" ,targetLabel));
@@ -354,7 +359,6 @@ for nodeIndex = 1:length(loraIDs)
                             'targetLabel'...
                              )    
                          
-        
         save(modelsSaveNameDaily,'Mdl',...
                             'mintsInputs',...
                             'mintsInputLabels',...
@@ -364,13 +368,11 @@ for nodeIndex = 1:length(loraIDs)
         
              
         trainingSaveNameDaily = getMintsFileNameGeneral(trainingMatsFolder,loraIDs,...
-                                    nodeIndex,target,"daily_Train")
+                                    nodeIndex,target,dailyString)
         folderCheck(trainingSaveNameDaily)                        
         
-        trainingSaveName      = strrep(trainingSaveNameDaily,"daily_Train",strcat(versionStrTrain,"/",versionStrTrain))                        
+        trainingSaveName      = strrep(trainingSaveNameDaily,dailyString,strcat(versionStrTrain,"/",versionStrTrain))                        
         folderCheck(trainingSaveName) 
-        
-        
         
         save(trainingSaveNameDaily,...
                  'Mdl',...
@@ -415,57 +417,70 @@ for nodeIndex = 1:length(loraIDs)
                  'numberPerBin',...
                  'pValid' ...
              )
-        
-        
-        
-        
-        
-        
+               
         %% Estimating Statistics 
-        outTrainEstimate=predictrnn(Mdl,In_Train);
-        outValidEstimate=predictrnn(Mdl,In_Validation);
+        outTrainEstimate= predict(Mdl,In_Train);
+        outValidEstimate= predict(Mdl,In_Validation);
        
-        
-        
-        
-        
+                               
         %% Visual Analysis
-        
         display(newline);
-        combinedFigDaily   = getMintsFileNameFigure(plotsFolder,loraIDs,nodeIndex,target,"daily_Train");
+        combinedFigDaily   = getMintsFileNameFigure(plotsFolder,loraIDs,nodeIndex,target,dailyString)
         folderCheck(combinedFigDaily) 
         
-        combinedFig        = strrep(combinedFigDaily,"daily_Train",strcat(versionStrTrain,"/",versionStrTrain)) 
+        combinedFig        = strrep(combinedFigDaily,dailyString,strcat(versionStrTrain,"/",versionStrTrain)) 
         folderCheck(combinedFig) 
+        
+        graphTitle2 = strcat("Method: ", string(Mdl.Method));
         
         drawScatterPlotMintsCombinedLimitsLora(Out_Train,...
                                          outTrainEstimate,...
                                          Out_Validation,...
                                          outValidEstimate,...
                                          limitsLow{targetIndex},...
-                                         limitsLow{targetIndex},...
+                                         limitsHigh{targetIndex},...
                                          loraID,...
                                          targetLabel,...
                                          instruments{targetIndex},...
                                          "Lora Node",...
-                                         units{target},...
-                                         combinedFigDaily); 
+                                         units{targetIndex},...
+                                         combinedFigDaily,...
+                                         graphTitle1,...
+                                         graphTitle2); 
         
         drawScatterPlotMintsCombinedLimitsLora(Out_Train,...
                                          outTrainEstimate,...
                                          Out_Validation,...
                                          outValidEstimate,...
-                                         0,...
-                                         20,...
+                                         limitsLow{targetIndex},...
+                                         limitsHigh{targetIndex},...
                                          loraID,...
                                          targetLabel,...
-                                         "Palas Spectrometor",...
+                                         instruments{targetIndex},...
                                          "Lora Node",...
-                                         "Unit",...
-                                         combinedFig); 
-
+                                         units{targetIndex},...
+                                         combinedFig,...
+                                         graphTitle1,...
+                                         graphTitle2); 
+                
+                                     
+            display(newline);
+            combinedFigDailyImp   = getMintsFileNameFigure(plotsFolder,loraIDs,nodeIndex,target,dailyStringImp)
+            folderCheck(combinedFigDailyImp) 
+            combinedFigImp        = strrep(combinedFigDailyImp,dailyString,strcat(versionStrTrain,"/",versionStrTrain)) 
+            folderCheck(combinedFigImp) 
+            drawPredictorImportainceLora(Mdl,20,...
+                                        targetLabel,mintsInputLabels,loraID,...
+                                         combinedFigDailyImp,graphTitle2)   
+            drawPredictorImportainceLora(Mdl,20,...
+                                        targetLabel,mintsInputLabels,loraID,...
+                                         combinedFigImp,graphTitle2)                                        
+                                                                 
 
             clearvars -except...
+                   graphTitle1...
+                   versionStrTrain versionStrMdl dailyString dailyStringImp...
+                   plotsFolder limitsLow limitsHigh units instruments....
                    palasWithAirmar deployments ...  
                    loraIDs loraID loraWithTargets loraMatsFolder...
                    versionStrTrain versionStrMdl ...
@@ -510,13 +525,7 @@ function [In_Train,Out_Train,...
     trainingT.dateTime   = [];
     validatingT.dateTime = [];   
     
-    
-    
-
 end
-
-
-
 
 
 function currentFileName = getMintsFileNameTraining(folder,nodeIDs,nodeIndex,...
@@ -1090,18 +1099,12 @@ function [] = drawScatterPlotMints(dataX,...
     plot2 = plot(fitresult)
     set(plot2,'DisplayName','Fit','LineWidth',2,'Color',[0 0 1]);
 
-    
-    
-    
     % Create plot
     plot3 = plot(...
          dataX,...
          dataY)
     set(plot3,'DisplayName','Data','Marker','o',...
         'LineStyle','none','Color',[0 0 0]);
-    
-    
-    
     
     yl=strcat(yInstrument,'~=',string(fitresult.p1),'*',xInstrument,'+',string(fitresult.p2)," (",units,")");
     ylabel(yl,'FontWeight','bold','FontSize',10);

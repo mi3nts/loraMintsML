@@ -60,6 +60,6 @@ deployments:
 
 
 binsPerColumn  : 400
-numberPerBin   : 20 
+numberPerBin   : 2 
 pValid         : 0.15
 

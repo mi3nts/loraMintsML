@@ -10,7 +10,9 @@ function [] = drawScatterPlotMintsCombinedLimitsLora(...
                                     xInstrument,...
                                     yInstrument,...
                                     units,...
-                                    saveNameFig)
+                                    saveNameFig,...
+                                    stringIn,...
+                                    stringIn2)
 %GETMINTSDATAFILES Summary of this function goes here
 %   Detailed explanation goes here
 % As Is Graphs 
@@ -33,7 +35,7 @@ function [] = drawScatterPlotMintsCombinedLimitsLora(...
     %% Plot 2 : Training Fit 
     % Fit model to data.
     % Set up fittype and options. 
-    ft = fittype( 'poly1' ); 
+    ft = fittype( 'poly2' ); 
     opts = fitoptions( 'Method', 'LinearLeastSquares' ); 
     opts.Lower = [0.6 -Inf];
     opts.Upper = [1.4 Inf];
@@ -128,10 +130,9 @@ function [] = drawScatterPlotMintsCombinedLimitsLora(...
     xlabel(strcat(xInstrument,' (',units,')'),'FontWeight','bold','FontSize',12);
 
     
-    %% START HERE 
+    %% Create title
     
-    % Create title
-    Top_Title=strcat(estimator," - Node " +string(nodeID));
+    Top_Title=strcat(estimator," - Node " +string(nodeID)," - " ,stringIn);
 
     %% Start Now 
     Middle_Title = strcat("Training: R^2 = ", string(rSquaredTrain),...
@@ -144,7 +145,7 @@ function [] = drawScatterPlotMintsCombinedLimitsLora(...
     Bottom_Title=strcat("Combined: R^2 = ", string(rSquared),...
                                   ", RMSE = ",string(rmse),...
                                    ", N = ",string(length(dataXAll))); 
-    title({Top_Title;Middle_Title;Middle2nd_Title;Bottom_Title},'FontWeight','bold');
+    title({Top_Title;Middle_Title;Middle2nd_Title;Bottom_Title;stringIn2},'FontWeight','bold');
 
     % Uncomment the following line to preserve the X-limits of the axes
     xlim([limitLow, limitHigh]);
@@ -159,7 +160,7 @@ function [] = drawScatterPlotMintsCombinedLimitsLora(...
    
     saveas(figure_1,char(saveNameFig));
    
-    Fig_name =strrep(saveNameFig,'png','.fig');
+    Fig_name =strrep(saveNameFig,'.png','.fig');
     saveas(figure_1,char(Fig_name));
 
 end

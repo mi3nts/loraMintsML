@@ -107,7 +107,9 @@ function [In_Train,Out_Train,...
     validatingT        = timetable2table(validatingTT);
     
     trainingT.dateTime   = [];
-    validatingT.dateTime = [];   
+    validatingT.dateTime = [];  
     
+    height(trainingT)
+    height(validatingT)
 end
 
