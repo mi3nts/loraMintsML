@@ -3,6 +3,9 @@ clc
 clear all 
 close all 
 
+poolobj = gcp('nocreate');
+delete(poolobj)
+
 display(newline)
 display("---------------------MINTS---------------------")
 
