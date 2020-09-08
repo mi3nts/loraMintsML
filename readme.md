@@ -111,9 +111,8 @@ Once the YAML file is updated you can run the ' L0001_raw2Mat.m' file under matl
 │   │             ├── loraMints_472b544e0018003d.mat
 │   │             ├── loraMints_472b544e001b003c.mat
 │   │             ├── ...
-
-
 </pre>
+
 The ' loraMints_--loraID--.mat' files contains the folowing data attributes. 
 
 
