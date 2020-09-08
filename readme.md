@@ -113,37 +113,35 @@ Once the YAML file is updated you can run the ' L0001_raw2Mat.m' file under matl
 │   │             ├── ...
 </pre>
 
-The 'loraMints_--loraID--.mat' files contains the folowing data attributes. The relevent units are also given below.  
-- NH3              
-- CO               
-- NO2              
-- C3H8             
-- C4H10            
-- CH4              
-- H2               
-- C2H5OH
-- P1_lpo           
-- P1_ratio         
-- P1_conc          
-- P2_lpo           
-- P2_ratio         
-- P2_conc          
-- Temperature      
-- Pressure         
-- Humidity         
-- gpsTime          
-- Latitude         
-- Longitude        
-- shuntVoltageBat  
-- busVoltageBat   
-- currentBat       
-- shuntVoltageSol
-- busVoltageSol   
-- currentSol       
-- CO2              
-- SCD30_temperature
-- SCD30_humidity   
-
-
+The 'loraMints_--loraID--.mat' files contains the folowing data attributes. 
+- NH3               : Ammonia NH3 1 – 500ppm
+- CO                : Carbon monoxide CO 1 – 1000ppm
+- NO2               : Nitrogen dioxide NO2 0.05 – 10ppm
+- C3H8              : Propane C3H8 >1000ppm
+- C4H10             : Iso-butane C4H10 >1000ppm
+- CH4               : Methane CH4 >1000ppm
+- H2                : Hydrogen H2 1 – 1000ppm
+- C2H5OH            : Ethanol C2H6OH 10 – 500ppm
+- P1_lpo            : Channel 1, Low Pulse Occupancy Time Per 15 Seconds          
+- P1_ratio          : (Channel 1, Low Pulse Occupancy Per Milli Second)/10         
+- P1_conc           : Concentration PM Mid range (between PM 2.5 and PM 10) in Particles per .01 cubic foot ~= particles per 283 milli Litres            
+- P2_lpo            : Channel 2, Low Pulse Occupancy Time Per 15 Seconds       
+- P2_ratio          :(Channel 2, Low Pulse Occupancy Per Milli Second)/10     
+- P2_conc           : PM10 Concentration in particles per .01 cubic foot ~= particles per 283 milli Litres    
+- Temperature       : -40 - 85 ℃, with ±1.0°C accuracy - From the SEEED BME280 Sensor   
+- Pressure          : 300 - 1100 hPa (1 hPa= one hundred Pa) with ±1.0 hPa accuracy 
+- Humidity          : 0% - 100% relative humidity , with ±3% accuracy - From the SEEED BME280 Sensor  
+- gpsTime           : NaN Value 
+- Latitude          : Degrees Latitude
+- Longitude         :	Degrees Longitude 
+- shuntVoltageBat   : Shunt Voltage for the Battery in Millie Volts
+- busVoltageBat     : Bus Voltage for the Battery in  Volts
+- currentBat        : Current sent from the Battery in Millie Amps 
+- shuntVoltageSol   : Shunt Voltage for the Solar Panel in Millie Volts
+- busVoltageSol     : Bus Voltage for the Solar Panel in  Volts
+- currentSol        : Current sent from the Battery in Millie Amps 
+- CO2               : 0 – 40’000 ppm ± (30 ppm + 3%) 
+- SCD30_temperature : Temperature (C)
+- SCD30_humidity    : Humidity (%)
 
 
