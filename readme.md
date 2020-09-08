@@ -140,8 +140,8 @@ The 'loraMints_--loraID--.mat' files contains the folowing data attributes.
 - shuntVoltageSol   : Shunt Voltage for the Solar Panel in Millie Volts
 - busVoltageSol     : Bus Voltage for the Solar Panel in  Volts
 - currentSol        : Current sent from the Battery in Millie Amps 
-- CO2               : 0 – 40’000 ppm ± (30 ppm + 3%) 
-- SCD30_temperature : Temperature (C)
-- SCD30_humidity    : Humidity (%)
+- CO2               : 0 - 40’000 ppm ± (30 ppm + 3%) - From the SEEED SCD30 Sensor   
+- SCD30_temperature : Temperature (C) - From the SEEED SCD30 Sensor   
+- SCD30_humidity    : Humidity (%) - From the SEEED SCD30 Sensor   
 
 
