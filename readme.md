@@ -113,11 +113,11 @@ Once the YAML file is updated you can run the ' L0001_raw2Mat.m' file under matl
 │   │             ├── ...
 </pre>
 
-The ' loraMints_--loraID--.mat' files contains the folowing data attributes. 
-    - 'NH3'              
-    - 'CO'               
-    - 'NO2'              
-    - 'C3H8'             
+The 'loraMints_--loraID--.mat' files contains the folowing data attributes. 
+- NH3              
+- CO               
+- NO2              
+- C3H8             
     - 'C4H10'            
     - 'CH4'              
     - 'H2'               
