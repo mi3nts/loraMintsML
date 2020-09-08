@@ -18,7 +18,7 @@ The code needs rsync installed on your PC.
 The host computer should have access to **mints@mintsdata.utdallas.edu:raw**. This will be provided upod request. 
 
 
-#### Example shell script to get Lora data under in its raw from **mintsdata.utdallas.edu** 
+#### Example shell script to get Lora data under in its raw from *mintsdata.utdallas.edu* 
 
 ```
 rsync -avzrtu --exclude={"*.png","*.jpg"} -e "ssh -p 2222" mints@mintsdata.utdallas.edu:raw/b827ebf74482/ /media/teamlary/teamlary3/air930/mintsData/b827ebf74482/
