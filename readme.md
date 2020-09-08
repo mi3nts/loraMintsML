@@ -113,37 +113,36 @@ Once the YAML file is updated you can run the ' L0001_raw2Mat.m' file under matl
 │   │             ├── ...
 </pre>
 
-The 'loraMints_--loraID--.mat' files contains the folowing data attributes. 
+The 'loraMints_--loraID--.mat' files contains the folowing data attributes. The relevent units are also given below.  
 - NH3              
 - CO               
 - NO2              
 - C3H8             
-    - 'C4H10'            
-    - 'CH4'              
-    - 'H2'               
-    - 'C2H5OH'           
-    - 'P1_lpo'           
-    - 'P1_ratio'         
-    - 'P1_conc'          
-    - 'P2_lpo'           
-    - 'P2_ratio'         
-    - 'P2_conc'          
-    - 'Temperature'      
-    - 'Pressure'         
-    - 'Humidity'         
-    - 'gpsTime'          
-    - 'Latitude'         
-    - 'Longitude'        
-    - 'shuntVoltageBat'  
-    - 'busVoltageBat'    
-    - 'currentBat'       
-    - 'shuntVoltageSol'  
-    - 'busVoltageSol'    
-    - 'currentSol'       
-    - 'CO2'              
-    - 'SCD30_temperature'
-    - 'SCD30_humidity'   
-
+- C4H10            
+- CH4              
+- H2               
+- C2H5OH
+- P1_lpo           
+- P1_ratio         
+- P1_conc          
+- P2_lpo           
+- P2_ratio         
+- P2_conc          
+- Temperature      
+- Pressure         
+- Humidity         
+- gpsTime          
+- Latitude         
+- Longitude        
+- shuntVoltageBat  
+- busVoltageBat   
+- currentBat       
+- shuntVoltageSol
+- busVoltageSol   
+- currentSol       
+- CO2              
+- SCD30_temperature
+- SCD30_humidity   
 
 
 
