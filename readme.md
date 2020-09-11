@@ -148,7 +148,7 @@ The 'loraMints_--loraID--.mat' files contains the folowing data attributes.
 Each lora node houses separate sensors. TO check on specific sensors a seprate code is done to plot graphs on each sensor. An example is given below. Once you run 
 `L0001_raw2Mat.m` go ahead and run `L0002_rawPlots.m`. It creates two figures for each individual sensors. The first one is just for the last weeks data (Under the token latest) and the other one is for the whole time that the sensor is running (Under the token spanned). The figures will appear under the following folder structure. 
 
-![Lora Latest]('/res/loraMints_478b558000330027_latest.png')
+![Lora Latest]('https://raw.githubusercontent.com/mi3nts/loraMintsML/master/res/loraMints_478b558000330027_latest.png')
 
 
 <pre>── <font color="#729FCF"><b>mintsData</b></font>
