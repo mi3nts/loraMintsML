@@ -9,7 +9,7 @@ display("------ MINTS ------")
 addpath("../../functions/")
 
 addpath("YAMLMatlab_0.4.3")
-mintsDefinitions  = ReadYaml('mintsDefinitions.yaml')
+mintsDefinitions  = ReadYaml('../mintsDefinitions.yaml')
 
 dataFolder = mintsDefinitions.dataFolder;
 gatewayIDs = mintsDefinitions.gatewayIDs;
@@ -29,7 +29,7 @@ display("Plots Located @ :"+ plotsFolder)
 display(newline)
 
 % going through the lora IDs
-for loraIDIndex = 1:length(loraIDs)
+for loraIDIndex = 50:length(loraIDs)
 
     loraID = loraIDs{loraIDIndex};
     display(strcat("Loading Lora Data for Node: ", loraID));
@@ -38,8 +38,14 @@ for loraIDIndex = 1:length(loraIDs)
     
     if isfile(loadName)
         load(loadName)
-        display(strcat("Lora Data Imported for Node: ", loraID));
         
+        
+        display(strcat("Lora Data Imported for Node: ", loraID));
+        mintsDataAll  = mintsData;
+        mintsData(mintsData.dateTime<datetime('now','timeZone','utc')-7,:) = [];
+        
+        
+        %% Latest Data  
         
         latitudePre  = rmmissing(mintsData.Latitude);
         longitudePre = rmmissing(mintsData.Longitude);
@@ -56,25 +62,31 @@ for loraIDIndex = 1:length(loraIDs)
              longitude    = longitudePre(end)   ;
         else 
            longitude    = NaN;
+        end
+        
+        drawTimeSeriesWithSaveLoraCheck(mintsData,loraID,latitude,longitude,"latest",plotsFolder);
+        
+        %% For Spanned Data 
+        latitudePre  = rmmissing(mintsDataAll.Latitude);
+        longitudePre = rmmissing(mintsDataAll.Longitude);
+        
+        
+        if length(latitudePre)>0
+            latitude     = latitudePre(end);     
+        else 
+            latitude = NaN;
         end 
         
         
-        drawTimeSeriesWithSaveLoraRaw(mintsData.dateTime,mintsData.P1_conc,...
-                                      mintsData.dateTime,mintsData.P2_conc,...
-                                      loraID,"Date Time","LPO Concentration",....
-                                    "Lora Mints",height(mintsData),latitude,longitude,...
-                                       plotsFolder)
-                                   
-        drawTimeSeriesWithSaveLoraRawLPO1(mintsData.dateTime,mintsData.P1_conc,...
-                                    loraID,"Date Time","LPO 1 Concentration",....
-                                    "Lora Mints",height(mintsData),latitude,longitude,...
-                                       plotsFolder)                          
+        if length(longitudePre)>0
+             longitude    = longitudePre(end)   ;
+        else 
+           longitude    = NaN;
+        end
         
-        drawTimeSeriesWithSaveLoraRawLPO2(mintsData.dateTime,mintsData.P2_conc,...
-                                    loraID,"Date Time","LPO 2 Concentration",....
-                                    "Lora Mints",height(mintsData),latitude,longitude,...
-                                       plotsFolder)                                   
-           
+        
+        drawTimeSeriesWithSaveLoraCheck(mintsDataAll,loraID,latitude,longitude,"spanned",plotsFolder);
+
         display(strcat("PLOTTING DONE"));
         
     else
