@@ -106,7 +106,6 @@ Once the YAML file is updated you can run the ' L0001_raw2Mat.m' file under matl
 <pre>── <font color="#729FCF"><b>mintsData</b></font>
 │   ├── <font color="#729FCF"><b>rawMats</b></font>
 │   │   └── <font color="#729FCF"><b>lora</b></font>
-│   │        ─ lora
 │   │             ├── loraMints_470a55800048003e.mat
 │   │             ├── loraMints_472b544e0018003d.mat
 │   │             ├── loraMints_472b544e001b003c.mat
@@ -143,5 +142,28 @@ The 'loraMints_--loraID--.mat' files contains the folowing data attributes.
 - CO2               : 0 - 40’000 ppm ± (30 ppm + 3%) - From the SEEED SCD30 Sensor   
 - SCD30_temperature : Temperature (C) - From the SEEED SCD30 Sensor   
 - SCD30_humidity    : Humidity (%) - From the SEEED SCD30 Sensor   
+
+#### Plotting Raw Data.
+
+Each lora node houses separate sensors. TO check on specific sensors a seprate code is done to plot graphs on each sensor. An example is given below. Once you run 
+`L0001_raw2Mat.m` go ahead and run `L0002_rawPlots.m`. It creates two figures for each individual sensors. The first one is just for the last weeks data (Under the token latest) and the other one is for the whole time that the sensor is running (Under the token spanned). The figures will appear under the following folder structure. 
+
+<pre>── <font color="#729FCF"><b>mintsData</b></font>
+│   ├── <font color="#729FCF"><b>rawMats</b></font>
+│   │   └── <font color="#729FCF"><b>lora</b></font>
+│   │         └── <font color="#729FCF"><b>spanned</b></font>
+│   │                   ├── <font color="#AD7FA8"><b>loraMints_470a55800048003e_spanned.png</b></font>
+│   │                   ├── <font color="#AD7FA8"><b>loraMints_471a55800038004e_spanned.png</b></font>
+│   │                   ├── <font color="#AD7FA8"><b>.......</b></font>
+|   │         └── <font color="#729FCF"><b>latest</b></font>
+│   │                   ├── <font color="#AD7FA8"><b>loraMints_470a55800048003e_latest.png</b></font>
+│   │                   ├── <font color="#AD7FA8"><b>loraMints_471a55800038004e_latest.png</b></font>
+│   │                   ├── <font color="#AD7FA8"><b>.......</b></font>                     
+</pre>
+
+
+
+
+
 
 
