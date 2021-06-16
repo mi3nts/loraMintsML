@@ -41,8 +41,8 @@ for loraIDIndex = 1:length(loraIDs)
     if(length(allFiles) >0)
         loraNodeAll = {};
         display(strcat("Gaining LoRa data for Node: ",loraID))
-        parfor fileNameIndex = 1: length(allFiles)
-            loraNodeAll{fileNameIndex} = loraRead(strcat(allFiles(fileNameIndex).folder,"/",allFiles(fileNameIndex).name),timeSpan);
+        for fileNameIndex = 1: length(allFiles)
+            loraNodeAll{fileNameIndex} = loraRead(strcat(allFiles(fileNameIndex).folder,"/",allFiles(fileNameIndex).name));
         end
         
         display(strcat("Concatinating LoRa data for Node: ",loraID));
