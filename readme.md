@@ -15,7 +15,7 @@ The code needs rsync installed on your PC.
 ```sudo apt install rsync grsync```
 
 #### Data Access 
-The host computer should have access to **mints@mintsdata.utdallas.edu:raw**. This will be provided upod request. 
+The host computer should have access to **mints@mintsdata.utdallas.edu:raw**. This will be provided upon request. 
 
 
 #### Example shell script to get Lora data under in its raw from *mintsdata.utdallas.edu* 
